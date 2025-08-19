@@ -1,9 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 
 const MusicPlayer = ({ src, audioRef, isPlaying, setIsPlaying }) => {
-  // const [isPlaying, setIsPlaying] = useState(false);
-
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -14,34 +12,48 @@ const MusicPlayer = ({ src, audioRef, isPlaying, setIsPlaying }) => {
     setIsPlaying(!isPlaying);
   };
 
+  // Sync state ketika audio di-pause/play dari luar
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => setIsPlaying(false);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [audioRef, setIsPlaying]);
+
   return (
     <div style={styles.container}>
-      <audio ref={audioRef} src={src} loop preload="auto"/>
+      <audio ref={audioRef} src={src} loop preload="auto" />
       <button onClick={togglePlay} style={styles.button}>
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
     </div>
   );
 };
+
 const styles = {
   container: {
-    position: 'fixed',
+    position: "fixed",
     top: 20,
     right: 20,
     zIndex: 999,
-    // background: '#ffffffcc',
-    // borderRadius: '50%',
-    // padding: '10px',
-    // boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-    // width: '45px',
-    // textAlign: 'center',
-    // alignItems: 'center',
   },
   button: {
-    background: 'none',
-    border: 'none',
-    fontSize: '15px',
-    cursor: 'pointer',
+    background: "#fff",
+    border: "1px solid #ccc",
+    borderRadius: "50%",
+    fontSize: "18px",
+    cursor: "pointer",
+    width: "40px",
+    height: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
   },
 };
 
