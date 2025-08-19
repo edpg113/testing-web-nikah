@@ -174,9 +174,7 @@ function App() {
         <div
           className="container-cerita"
           data-aos="fade-up"
-          // data-aos-duration="300"
-          data-aos-delay="300"
-          data-aos-easing="ease-in-back"
+        
         >
           <div class="judul-undangan">
             <h1>Cerita Cinta</h1>
