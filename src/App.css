@@ -355,7 +355,7 @@ body {
   }
 
   .timeline ul li:nth-child(even) div {
-    left: -190px;
+    left: -180px;
   }
 
   .timeline ul li div p {
