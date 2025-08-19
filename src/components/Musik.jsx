@@ -16,7 +16,7 @@ const MusicPlayer = ({ src, audioRef, isPlaying, setIsPlaying }) => {
 
   return (
     <div style={styles.container}>
-      <audio ref={audioRef} src={src} loop />
+      <audio ref={audioRef} src={src} loop preload="auto"/>
       <button onClick={togglePlay} style={styles.button}>
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
