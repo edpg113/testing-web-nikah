@@ -174,9 +174,8 @@ function App() {
         <div
           className="container-cerita"
           data-aos="fade-up"
-        
         >
-          <div class="judul-undangan">
+          <div className="judul-undangan">
             <h1>Cerita Cinta</h1>
             <p>
               Banyak cerita yang kami lalui sehingga akhirnya kami bisa bersatu,
@@ -185,7 +184,7 @@ function App() {
             </p>
           </div>
 
-          <section class="timeline">
+          <section className="timeline">
             <ul>
               <li>
                 <div>
