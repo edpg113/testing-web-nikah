@@ -1,26 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./carousel.css";
 
 const Carousel = ({ images, autoPlayInterval = 3000 }) => {
   const [index, setIndex] = useState(0);
   const slideRef = useRef();
+  const intervalRef = useRef();
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
-  // Autoplay
-  useEffect(() => {
-    const interval = setInterval(() => {
-      next();
-    }, autoPlayInterval);
-    return () => clearInterval(interval);
-  }, [index]);
-
-  const next = () => {
+  const next = useCallback(() => {
     setIndex((prev) => (prev + 1) % images.length);
+  }, [images.length]);
+
+  const prev = useCallback(() => {
+    setIndex((prev) => (prev - 1 + images.length) % images.length);
+  }, [images.length]);
+
+  // Autoplay setup
+  useEffect(() => {
+    startAutoPlay();
+    return () => stopAutoPlay();
+  }, [next]);
+
+  const startAutoPlay = () => {
+    stopAutoPlay(); // clear dulu biar tidak double
+    intervalRef.current = setInterval(next, autoPlayInterval);
   };
 
-  const prev = () => {
-    setIndex((prev) => (prev - 1 + images.length) % images.length);
+  const stopAutoPlay = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
   };
 
   // Swipe gesture
@@ -38,6 +46,7 @@ const Carousel = ({ images, autoPlayInterval = 3000 }) => {
     } else if (touchEndX.current - touchStartX.current > 50) {
       prev();
     }
+    startAutoPlay(); // restart autoplay setelah swipe
   };
 
   return (
@@ -62,23 +71,12 @@ const Carousel = ({ images, autoPlayInterval = 3000 }) => {
           />
         ))}
       </div>
-      <button className="carousel-button left" onClick={prev}>
+      <button className="carousel-button left" onClick={() => { prev(); startAutoPlay(); }}>
         ❮
       </button>
-      <button className="carousel-button right" onClick={next}>
+      <button className="carousel-button right" onClick={() => { next(); startAutoPlay(); }}>
         ❯
       </button>
-
-      {/* Dots Indicator */}
-      {/* <div className="carousel-dots">
-        {images.map((_, i) => (
-          <span
-            key={i}
-            className={`dot ${i === index ? "active" : ""}`}
-            onClick={() => setIndex(i)}
-          />
-        ))}
-      </div> */}
     </div>
   );
 };
