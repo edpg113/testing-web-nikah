@@ -58,6 +58,7 @@ const Carousel = ({ images, autoPlayInterval = 3000 }) => {
             src={src}
             alt={`Slide ${i}`}
             className="carousel-slide"
+            loading="lazy"
           />
         ))}
       </div>
